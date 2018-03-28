@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Header from './Components/Header/Header.js';
+import CatCard from './Components/CatCard/CatCard.js';
 import './App.css';
 
+// have state that has array to hold CatCards, map over array of CatCards
+// and put them onto the grid
+
 class App extends Component {
-  render() {
+  render () {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <Header />
+        <div className='columns'>
+          <div className='column is-4'>
+            <CatCard />
+          </div>
+          <div className='column is-4'>
+            <CatCard />
+          </div>
+          <div className='column is-4'>
+            <CatCard />
+          </div>
+        </div>
       </div>
     );
   }
