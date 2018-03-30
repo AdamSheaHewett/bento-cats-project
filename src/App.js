@@ -23,23 +23,35 @@ class App extends Component {
         for (let i = 0; i < 25; i++) {
           imageArray.push((data.getElementsByTagName('image')[i].childNodes[1].innerHTML));
         }
-        console.log(imageArray);
         this.setState({images: imageArray});
+      }, (error) => {
+        console.log('error:', error);
+      });
+    fetch('http://cors-proxy.htmldriven.com/?url=https://catfact.ninja/facts?limit=25')
+      .then(res => res.json())
+      .then((result) => {
+        let factArray = JSON.parse(result.body).data;
+        console.log(factArray);
+        this.setState({facts: factArray});
       }, (error) => {
         console.log('error:', error);
       });
   }
 
-  // for each fact that comes from the api, also put it into a CatCard
-
   render () {
+    const facts = this.state.facts.map((fact) =>
+      fact.fact
+    );
     return (
       <div>
         <Header />
         <div className='columns'>
           <div className='column is-6 is-offset-3'>
-            {this.state.images.map((image, index) =>
-              <CatCard image={image} key={index} />
+            {this.state.images.map((image, i) =>
+              <CatCard key={i}
+                image={image}
+                fact={facts[i]}
+              />
             )}
           </div>
         </div>

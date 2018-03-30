@@ -10,14 +10,14 @@ const CatCard = props => (
       </figure>
     </div>
     <div className='card-content'>
-      <div className='content level'>
-        <div className='level-left'>
-          <span className='level-item'>
+      <div className='content columns is-vcentered'>
+        <div className='column is-9'>
+          <p className=''>
             {props.fact}
-          </span>
+          </p>
         </div>
-        <div className='level-right'>
-          <button className='button level-item'>Favorite</button>
+        <div className='column is-2 is-offset-1'>
+          <button className='button'>Favorite</button>
         </div>
       </div>
     </div>
