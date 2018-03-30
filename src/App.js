@@ -38,8 +38,8 @@ class App extends Component {
         <Header />
         <div className='columns'>
           <div className='column is-6 is-offset-3'>
-            {this.state.images.map((image) =>
-              <CatCard image={image} />
+            {this.state.images.map((image, index) =>
+              <CatCard image={image} key={index} />
             )}
           </div>
         </div>
