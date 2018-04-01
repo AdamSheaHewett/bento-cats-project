@@ -13,7 +13,7 @@ class App extends Component {
       facts: [],
       favorited: false
     };
-    this.handleFavClick = this.handleFavClick.bind(this);
+    // this.handleFavClick = this.handleFavClick.bind(this);
     this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
@@ -46,8 +46,11 @@ class App extends Component {
     console.log(this);
   }
 
-  handleFavoriteButton (id) {
-    // event.preventDefault();
+  handleFavoriteButton (event) {
+    event.preventDefault();
+    // let favArray = this.state.favorited;
+    // favArray.push();
+    // this.setState({favorited: favArray});
     if (this.state.favorited) {
       this.setState({favorited: false});
     } else {
@@ -82,7 +85,7 @@ class App extends Component {
                 fact={facts[i]}
               >
                 <CardButton
-                  onClick={() => this.handleFavoriteButton}
+                  onClick={this.handleFavoriteButton}
                 >
                   {this.state.favorited ? 'Unfavorite' : 'Favorite'}
                 </CardButton>

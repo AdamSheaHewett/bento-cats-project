@@ -1,22 +1,33 @@
 import React, { Component } from 'react';
 
 class CatCard extends Component {
-  // constructor (props) {
-  //   super(props);
-  //   this.state = {
-  //     favorited: false
-  //   };
-  //   this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
-  // }
+  constructor (props) {
+    super(props);
+    this.state = {
+      favorited: false
+    };
+    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
+  }
 
-  // handleFavoriteButton (event) {
-  //   event.preventDefault();
-  //   if (this.state.favorited) {
-  //     this.setState({favorited: false});
-  //   } else {
-  //     this.setState({favorited: true});
-  //   }
-  // }
+  handleFavoriteButton (event) {
+    this.props.handleFavoriteButton(event);
+    // event.preventDefault();
+    // if (this.state.favorited) {
+    //   this.setState({favorited: false});
+    //   console.log(this);
+    //   console.log(this.state);
+    //   console.log(this.props);
+    // } else {
+    //   this.setState({favorited: true});
+    // }
+  }
+
+  // <button
+  //   className='button'
+  //   onClick={this.handleFavoriteButton}
+  // >
+  //   {this.state.favorited ? 'Unfavorite' : 'Favorite'}
+  // </button>
 
   render () {
     return (
