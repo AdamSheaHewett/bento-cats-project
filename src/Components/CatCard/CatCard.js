@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 
 class CatCard extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      favorited: false
-    };
-    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
-  }
+  // constructor (props) {
+  //   super(props);
+  //   this.state = {
+  //     favorited: false
+  //   };
+  //   this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
+  // }
 
-  handleFavoriteButton (event) {
-    event.preventDefault();
-    if (this.state.favorited) {
-      this.setState({favorited: false});
-    } else {
-      this.setState({favorited: true});
-    }
-  }
+  // handleFavoriteButton (event) {
+  //   event.preventDefault();
+  //   if (this.state.favorited) {
+  //     this.setState({favorited: false});
+  //   } else {
+  //     this.setState({favorited: true});
+  //   }
+  // }
 
   render () {
     return (
@@ -34,12 +34,7 @@ class CatCard extends Component {
               </p>
             </div>
             <div className='column is-2 is-offset-1'>
-              <button
-                className='button'
-                onClick={this.handleFavoriteButton}
-              >
-                {this.state.favorited ? 'Unfavorite' : 'Favorite'}
-              </button>
+              {this.props.children}
             </div>
           </div>
         </div>

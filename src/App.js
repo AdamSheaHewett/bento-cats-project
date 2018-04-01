@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Header from './Components/Header/Header.js';
+import HeaderButton from './Components/Header/HeaderButton.js';
 import CatCard from './Components/CatCard/CatCard.js';
+import CardButton from './Components/CatCard/CardButton.js';
 import './App.css';
 
 class App extends Component {
@@ -8,8 +10,11 @@ class App extends Component {
     super(props);
     this.state = {
       images: [],
-      facts: []
+      facts: [],
+      favorited: false
     };
+    this.handleFavClick = this.handleFavClick.bind(this);
+    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
   componentDidMount () {
@@ -30,11 +35,24 @@ class App extends Component {
       .then(res => res.json())
       .then((result) => {
         let factArray = JSON.parse(result.body).data;
-        console.log(factArray);
         this.setState({facts: factArray});
       }, (error) => {
         console.log('error:', error);
       });
+  }
+
+  handleFavClick (event) {
+    event.preventDefault();
+    console.log(this);
+  }
+
+  handleFavoriteButton (id) {
+    // event.preventDefault();
+    if (this.state.favorited) {
+      this.setState({favorited: false});
+    } else {
+      this.setState({favorited: true});
+    }
   }
 
   render () {
@@ -43,14 +61,32 @@ class App extends Component {
     );
     return (
       <div>
-        <Header />
+        <Header>
+          <HeaderButton>
+            Sort by last word in fact.
+          </HeaderButton>
+          <HeaderButton
+            onClick={this.handleFavClick}
+          >
+            Show only favorited cats
+          </HeaderButton>
+          <HeaderButton>
+            Show only one at a time.
+          </HeaderButton>
+        </Header>
         <div className='columns'>
           <div className='column is-6 is-offset-3'>
             {this.state.images.map((image, i) =>
               <CatCard key={i}
                 image={image}
                 fact={facts[i]}
-              />
+              >
+                <CardButton
+                  onClick={() => this.handleFavoriteButton}
+                >
+                  {this.state.favorited ? 'Unfavorite' : 'Favorite'}
+                </CardButton>
+              </CatCard>
             )}
           </div>
         </div>
