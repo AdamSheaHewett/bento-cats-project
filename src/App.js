@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from './Components/Header/Header.js';
 import HeaderButton from './Components/Header/HeaderButton.js';
 import CatCard from './Components/CatCard/CatCard.js';
-import CardButton from './Components/CatCard/CardButton.js';
+// import CardButton from './Components/CatCard/CardButton.js';
 import './App.css';
 
 class App extends Component {
@@ -13,8 +13,9 @@ class App extends Component {
       facts: [],
       favorited: false
     };
+    this.handleSortClick = this.handleSortClick.bind(this);
     // this.handleFavClick = this.handleFavClick.bind(this);
-    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
+    // this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
   componentDidMount () {
@@ -41,22 +42,40 @@ class App extends Component {
       });
   }
 
+  handleSortClick (event) {
+    event.preventDefault();
+    let lastWordArray = [];
+    for (let i = 0; i < this.state.facts.length; i++) {
+      let wholeFact = this.state.facts[i].fact;
+      let lastWord = wholeFact.split(' ').splice(-1)[0];
+      lastWordArray.push(lastWord);
+    }
+    lastWordArray.sort(function (a, b) {
+      let nameA = a.toLowerCase();
+      let nameB = b.toLowerCase();
+      if (nameA < nameB) { return -1; }
+      if (nameA > nameB) { return 1; }
+      return 0;
+    });
+    console.log(lastWordArray);
+  }
+
   handleFavClick (event) {
     event.preventDefault();
     console.log(this);
   }
 
-  handleFavoriteButton (event) {
-    event.preventDefault();
-    // let favArray = this.state.favorited;
-    // favArray.push();
-    // this.setState({favorited: favArray});
-    if (this.state.favorited) {
-      this.setState({favorited: false});
-    } else {
-      this.setState({favorited: true});
-    }
-  }
+  // handleFavoriteButton (event) {
+  //   event.preventDefault();
+  //   // let favArray = this.state.favorited;
+  //   // favArray.push();
+  //   // this.setState({favorited: favArray});
+  //   if (this.state.favorited) {
+  //     this.setState({favorited: false});
+  //   } else {
+  //     this.setState({favorited: true});
+  //   }
+  // }
 
   render () {
     const facts = this.state.facts.map((fact) =>
@@ -65,7 +84,9 @@ class App extends Component {
     return (
       <div>
         <Header>
-          <HeaderButton>
+          <HeaderButton
+            onClick={this.handleSortClick}
+          >
             Sort by last word in fact.
           </HeaderButton>
           <HeaderButton
@@ -83,13 +104,7 @@ class App extends Component {
               <CatCard key={i}
                 image={image}
                 fact={facts[i]}
-              >
-                <CardButton
-                  onClick={this.handleFavoriteButton}
-                >
-                  {this.state.favorited ? 'Unfavorite' : 'Favorite'}
-                </CardButton>
-              </CatCard>
+              />
             )}
           </div>
         </div>

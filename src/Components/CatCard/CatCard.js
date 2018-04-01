@@ -10,24 +10,17 @@ class CatCard extends Component {
   }
 
   handleFavoriteButton (event) {
-    this.props.handleFavoriteButton(event);
-    // event.preventDefault();
-    // if (this.state.favorited) {
-    //   this.setState({favorited: false});
-    //   console.log(this);
-    //   console.log(this.state);
-    //   console.log(this.props);
-    // } else {
-    //   this.setState({favorited: true});
-    // }
+    // this.props.handleFavoriteButton(event);
+    event.preventDefault();
+    if (this.state.favorited) {
+      this.setState({favorited: false});
+      console.log(this);
+      console.log(this.state);
+      console.log(this.props);
+    } else {
+      this.setState({favorited: true});
+    }
   }
-
-  // <button
-  //   className='button'
-  //   onClick={this.handleFavoriteButton}
-  // >
-  //   {this.state.favorited ? 'Unfavorite' : 'Favorite'}
-  // </button>
 
   render () {
     return (
@@ -45,7 +38,12 @@ class CatCard extends Component {
               </p>
             </div>
             <div className='column is-2 is-offset-1'>
-              {this.props.children}
+              <button
+                className='button'
+                onClick={this.handleFavoriteButton}
+              >
+                {this.state.favorited ? 'Unfavorite' : 'Favorite'}
+              </button>
             </div>
           </div>
         </div>
