@@ -4,8 +4,18 @@ class CatCard extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      favorited: true
+      favorited: false
     };
+    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
+  }
+
+  handleFavoriteButton (event) {
+    event.preventDefault();
+    if (this.state.favorited) {
+      this.setState({favorited: false});
+    } else {
+      this.setState({favorited: true});
+    }
   }
 
   render () {
@@ -17,7 +27,7 @@ class CatCard extends Component {
           </figure>
         </div>
         <div className='card-content'>
-          <div className='content columns is-vcentered'>
+          <div className='content columns is-vcentered is-mobile'>
             <div className='column is-9'>
               <p className=''>
                 {this.props.fact}
@@ -26,9 +36,9 @@ class CatCard extends Component {
             <div className='column is-2 is-offset-1'>
               <button
                 className='button'
-                style={{ background: this.state.favorited ? 'blue' : 'red' }}
+                onClick={this.handleFavoriteButton}
               >
-                Favorite
+                {this.state.favorited ? 'Unfavorite' : 'Favorite'}
               </button>
             </div>
           </div>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
 import Header from './Components/Header/Header.js';
 import CatCard from './Components/CatCard/CatCard.js';
 import './App.css';
@@ -9,10 +8,8 @@ class App extends Component {
     super(props);
     this.state = {
       images: [],
-      facts: [],
-      favorited: true
+      facts: []
     };
-    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
   componentDidMount () {
@@ -40,15 +37,6 @@ class App extends Component {
       });
   }
 
-  handleFavoriteButton (event) {
-    event.preventDefault();
-    if (this.state.favorited) {
-      this.setState({favorited: false});
-    } else {
-      this.setState({favorited: true});
-    }
-  }
-
   render () {
     const facts = this.state.facts.map((fact) =>
       fact.fact
@@ -62,7 +50,6 @@ class App extends Component {
               <CatCard key={i}
                 image={image}
                 fact={facts[i]}
-                onClick={this.handleFavoriteButton}
               />
             )}
           </div>
