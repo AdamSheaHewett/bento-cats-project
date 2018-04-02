@@ -18,6 +18,8 @@ class App extends Component {
     // this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
+  // once the component mounts, call both the image API and the fact API,
+  // and store their responses in state
   componentDidMount () {
     fetch('http://thecatapi.com/api/images/get?format=xml&results_per_page=25')
       .then(res => res.text())
@@ -42,6 +44,8 @@ class App extends Component {
       });
   }
 
+  // on the click of the "Sort by last word in fact." button, get the last word
+  // in the fact, and sort them alphabetically
   handleSortClick (event) {
     event.preventDefault();
     let lastWordArray = [];
@@ -60,10 +64,23 @@ class App extends Component {
     console.log(lastWordArray);
   }
 
+  // on the click of the "Show only favorited cats." button, show only cats that
+  // have state favorited = true.
   handleFavClick (event) {
     event.preventDefault();
     console.log(this);
   }
+
+  // on the click of the "Show only one at a time." button, display only one CatCard,
+  // set OnlyOneShown state to true. if true, change to false and show all CatCards again.
+  handleOnlyOneClick (event) {
+    event.preventDefault();
+  }
+
+  // the following code would be used if we were to not store the favorited state
+  // for each CatCard in the individual components. The problem is that the state here
+  // would affect all the card components. My idea was to add each favorited card
+  // to an array and just display those cards in the array but that didn't seem to work.
 
   // handleFavoriteButton (event) {
   //   event.preventDefault();
@@ -92,9 +109,11 @@ class App extends Component {
           <HeaderButton
             onClick={this.handleFavClick}
           >
-            Show only favorited cats
+            Show only favorited cats.
           </HeaderButton>
-          <HeaderButton>
+          <HeaderButton
+            onClick={this.handleOnlyOneClick}
+          >
             Show only one at a time.
           </HeaderButton>
         </Header>

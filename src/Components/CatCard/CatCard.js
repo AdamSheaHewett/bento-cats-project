@@ -9,14 +9,16 @@ class CatCard extends Component {
     this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
+  // changing the state within the Card component allows for individual
+  // cards to be favorited as opposed to all cards being changed
+  // by keeping Card state in the App component
+
   handleFavoriteButton (event) {
+    // this line could be used if we were controlling Card state from the App component:
     // this.props.handleFavoriteButton(event);
     event.preventDefault();
     if (this.state.favorited) {
       this.setState({favorited: false});
-      console.log(this);
-      console.log(this.state);
-      console.log(this.props);
     } else {
       this.setState({favorited: true});
     }
