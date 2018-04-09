@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from './Components/Header/Header.js';
 import HeaderButton from './Components/Header/HeaderButton.js';
 import CatCard from './Components/CatCard/CatCard.js';
-// import CardButton from './Components/CatCard/CardButton.js';
+import CardButton from './Components/CatCard/CardButton.js';
 import './App.css';
 
 class App extends Component {
@@ -10,17 +10,9 @@ class App extends Component {
     super(props);
     this.state = {
       cats: []
-      // cat: {
-      //   image: null,
-      //   fact: null
-      // }
-      // images: [],
-      // facts: [],
-      // favorited: []
     };
-    // a.fact.split(' ')[-1]
     this.handleSortClick = this.handleSortClick.bind(this);
-    // this.handleFavClick = this.handleFavClick.bind(this);
+    this.handleFavClick = this.handleFavClick.bind(this);
     // this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
@@ -28,7 +20,6 @@ class App extends Component {
   // and store their responses in state
   componentDidMount () {
     var catArray = [];
-    // var catObj = {};
     let imageArray = [];
     fetch('http://thecatapi.com/api/images/get?format=xml&results_per_page=25')
       .then(res => res.text())
@@ -52,6 +43,7 @@ class App extends Component {
               var catObj = {};
               catObj['image'] = imageArray[i];
               catObj['fact'] = factArray[i].fact;
+              catObj['favorited'] = false;
               catArray.push(catObj);
             }
             console.log(catArray);
@@ -86,7 +78,7 @@ class App extends Component {
   // have state favorited = true.
   handleFavClick (event) {
     event.preventDefault();
-    console.log(this);
+    console.log(this.state.cats);
   }
 
   // on the click of the "Show only one at a time." button, display only one CatCard,
@@ -138,7 +130,9 @@ class App extends Component {
               <CatCard key={i}
                 image={key.image}
                 fact={key.fact}
-              />
+              >
+                <CardButton />
+              </CatCard>
             )}
           </div>
         </div>

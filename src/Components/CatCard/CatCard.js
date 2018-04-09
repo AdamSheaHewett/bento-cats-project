@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
 
 class CatCard extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      favorited: false
-    };
-    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
-  }
+  // constructor (props) {
+  //   super(props);
+  //   this.state = {
+  //     favorited: false
+  //   };
+  //   this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
+  // }
 
   // changing the state within the Card component allows for individual
   // cards to be favorited as opposed to all cards being changed
   // by keeping Card state in the App component
 
-  handleFavoriteButton (event) {
-    // this line could be used if we were controlling Card state from the App component:
-    // this.props.handleFavoriteButton(event);
-    event.preventDefault();
-    if (this.state.favorited) {
-      this.setState({favorited: false});
-    } else {
-      this.setState({favorited: true});
-    }
-  }
+  // handleFavoriteButton (event) {
+  // this line could be used if we were controlling Card state from the App component:
+  // this.props.handleFavoriteButton(event);
+  //   event.preventDefault();
+  //   if (this.state.favorited) {
+  //     this.setState({favorited: false});
+  //   } else {
+  //     this.setState({favorited: true});
+  //   }
+  // }
 
   render () {
     return (
@@ -40,12 +40,7 @@ class CatCard extends Component {
               </p>
             </div>
             <div className='column is-2 is-offset-1'>
-              <button
-                className='button'
-                onClick={this.handleFavoriteButton}
-              >
-                {this.state.favorited ? 'Unfavorite' : 'Favorite'}
-              </button>
+              {this.props}
             </div>
           </div>
         </div>
