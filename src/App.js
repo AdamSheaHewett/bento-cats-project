@@ -75,31 +75,33 @@ class App extends Component {
   // in the fact, and sort them alphabetically
   handleSortClick (event) {
     event.preventDefault();
-    console.log(this.state.facts);
-
+    // make an object with last word as keys, whole fact for value
     let lastWordUnordered = {};
-    for (let i = 0; i < this.state.facts.length; i++) {
-      let wholeFact = this.state.facts[i].fact;
+    for (let i = 0; i < this.state.cats.length; i++) {
+      let wholeFact = this.state.cats[i].fact;
       let lastWord = wholeFact.split(' ').splice(-1)[0].toLowerCase();
-      console.log(lastWord);
       lastWordUnordered[lastWord] = wholeFact;
     }
     console.log(lastWordUnordered);
-
+    // sort objects by keys
     const lastWordOrdered = {};
     Object.keys(lastWordUnordered).sort().forEach(function (key) {
       lastWordOrdered[key] = lastWordUnordered[key];
     });
     console.log(lastWordOrdered);
-
+    // push sorted whole facts into array
     let sortedFactArray = [];
     for (var i in lastWordOrdered) {
       sortedFactArray.push({fact: lastWordOrdered[i]});
     }
     console.log(sortedFactArray);
 
-    this.setState({facts: sortedFactArray});
+    this.setState({cats: {fact: sortedFactArray}});
   }
+
+  // componentWillReceiveProps() {
+  //
+  // }
 
   // on the click of the "Show only favorited cats." button, show only cats that
   // have state favorited = true.
@@ -132,12 +134,6 @@ class App extends Component {
   // }
 
   render () {
-    // const facts = this.state.facts.map((fact) =>
-    //   fact.fact
-    // );
-    // const favorited = this.state.favorited.map((fav) =>
-    //   fav
-    // );
     return (
       <div>
         <Header>
@@ -160,7 +156,6 @@ class App extends Component {
         <div className='columns'>
           <div className='column is-6 is-offset-3'>
             {this.state.cats.map((key, i) =>
-              // console.log(key.fact)
               <CatCard key={i}
                 image={key.image}
                 fact={key.fact}
