@@ -18,6 +18,7 @@ class App extends Component {
       // facts: [],
       // favorited: []
     };
+    // a.fact.split(' ')[-1]
     this.handleSortClick = this.handleSortClick.bind(this);
     // this.handleFavClick = this.handleFavClick.bind(this);
     // this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
@@ -33,7 +34,6 @@ class App extends Component {
       .then(res => res.text())
       .then(result => (new window.DOMParser()).parseFromString(result, 'text/xml'))
       .then((data) => {
-        // use id?
         // the number 25 is hard-coded for the demonstration from the given API
         for (let i = 0; i < 25; i++) {
           imageArray.push(
@@ -60,48 +60,27 @@ class App extends Component {
             console.log('error:', error);
           })
       );
-
-    // fetch('http://cors-proxy.htmldriven.com/?url=https://catfact.ninja/facts?limit=25')
-    //   .then(res => res.json())
-    //   .then((result) => {
-    //     let factArray = JSON.parse(result.body).data;
-    //     this.setState({facts: factArray});
-    //   }, (error) => {
-    //     console.log('error:', error);
-    //   });
   }
 
   // on the click of the "Sort by last word in fact." button, get the last word
   // in the fact, and sort them alphabetically
   handleSortClick (event) {
     event.preventDefault();
-    // make an object with last word as keys, whole fact for value
-    let lastWordUnordered = {};
-    for (let i = 0; i < this.state.cats.length; i++) {
-      let wholeFact = this.state.cats[i].fact;
-      let lastWord = wholeFact.split(' ').splice(-1)[0].toLowerCase();
-      lastWordUnordered[lastWord] = wholeFact;
-    }
-    console.log(lastWordUnordered);
-    // sort objects by keys
-    const lastWordOrdered = {};
-    Object.keys(lastWordUnordered).sort().forEach(function (key) {
-      lastWordOrdered[key] = lastWordUnordered[key];
+    var catObj = this.state.cats;
+    catObj.sort(function (a, b) {
+      var varA = a.fact.split(' ').splice(-1)[0];
+      var varB = b.fact.split(' ').splice(-1)[0];
+      if (varA < varB) {
+        return -1;
+      }
+      if (varA > varB) {
+        return 1;
+      }
+      return 0;
     });
-    console.log(lastWordOrdered);
-    // push sorted whole facts into array
-    let sortedFactArray = [];
-    for (var i in lastWordOrdered) {
-      sortedFactArray.push({fact: lastWordOrdered[i]});
-    }
-    console.log(sortedFactArray);
-
-    this.setState({cats: {fact: sortedFactArray}});
+    console.log(catObj);
+    this.setState({cats: catObj});
   }
-
-  // componentWillReceiveProps() {
-  //
-  // }
 
   // on the click of the "Show only favorited cats." button, show only cats that
   // have state favorited = true.
