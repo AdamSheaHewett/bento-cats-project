@@ -40,7 +40,7 @@ class CatCard extends Component {
               </p>
             </div>
             <div className='column is-2 is-offset-1'>
-              {this.props}
+              {this.props.children}
             </div>
           </div>
         </div>

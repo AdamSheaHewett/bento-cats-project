@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import update from 'immutability-helper';
 import Header from './Components/Header/Header.js';
 import HeaderButton from './Components/Header/HeaderButton.js';
 import CatCard from './Components/CatCard/CatCard.js';
@@ -12,8 +13,8 @@ class App extends Component {
       cats: []
     };
     this.handleSortClick = this.handleSortClick.bind(this);
-    this.handleFavClick = this.handleFavClick.bind(this);
-    // this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
+    this.handleFavSort = this.handleFavSort.bind(this);
+    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
   // once the component mounts, call both the image API and the fact API,
@@ -76,7 +77,7 @@ class App extends Component {
 
   // on the click of the "Show only favorited cats." button, show only cats that
   // have state favorited = true.
-  handleFavClick (event) {
+  handleFavSort (event) {
     event.preventDefault();
     console.log(this.state.cats);
   }
@@ -87,22 +88,33 @@ class App extends Component {
     event.preventDefault();
   }
 
-  // the following code would be used if we were to not store the favorited state
-  // for each CatCard in the individual components. The problem is that the state here
-  // would affect all the card components. My idea was to add each favorited card
-  // to an array and just display those cards in the array but that didn't seem to work.
-
-  // handleFavoriteButton (event) {
-  //   event.preventDefault();
-  //   // let favArray = this.state.favorited;
-  //   // favArray.push();
-  //   // this.setState({favorited: favArray});
-  //   if (this.state.favorited) {
-  //     this.setState({favorited: false});
-  //   } else {
-  //     this.setState({favorited: true});
-  //   }
-  // }
+  // on the click of a specifc CatCard's favorite button, set favorited to true
+  // or false based on the current value
+  handleFavoriteButton (event) {
+    event.preventDefault();
+    // get array of cats
+    let catArr = this.state.cats;
+    // get specific card's index in array
+    let currCat = event.target.value;
+    // if favorited valye at index is false, go into the loop to change it to true
+    if (!catArr[currCat].favorited) {
+      // cats: { ...this.state.cats, favorited: true }}
+      // this.setState({
+      //   cats: Object.assign({}, this.state.cats, {favorited: true})
+      // });
+      // let newTicket = update(originalTicket,{
+      //   codeshare: {
+      //     0: { $set: {company:'AZ', flightNo:'7320'} }
+      //   }
+      // });
+      let newCat = update(catArr, {
+        5: {$set: {favorited: true}}
+      });
+      this.setState({cats: newCat});
+    } else {
+      // this.setState({cats: { ...this.state.cats, favorited: false }});
+    }
+  }
 
   render () {
     return (
@@ -114,7 +126,7 @@ class App extends Component {
             Sort by last word in fact.
           </HeaderButton>
           <HeaderButton
-            onClick={this.handleFavClick}
+            onClick={this.handleFavSort}
           >
             Show only favorited cats.
           </HeaderButton>
@@ -131,7 +143,12 @@ class App extends Component {
                 image={key.image}
                 fact={key.fact}
               >
-                <CardButton />
+                <CardButton
+                  value={i}
+                  onClick={this.handleFavoriteButton}
+                >
+                  {this.state.favorited ? 'Unfavorite' : 'Favorite'}
+                </CardButton>
               </CatCard>
             )}
           </div>
