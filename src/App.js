@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import update from 'immutability-helper';
+import update from 'immutability-helper';
 import Header from './Components/Header/Header.js';
 import HeaderButton from './Components/Header/HeaderButton.js';
 import CatCard from './Components/CatCard/CatCard.js';
@@ -18,7 +18,7 @@ class App extends Component {
     this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
-  // once the component mounts, call both the image API and the fact API,
+  // once the app component mounts, call both the image API and the fact API,
   // and store their responses in state
   componentDidMount () {
     var catArray = [];
@@ -42,7 +42,7 @@ class App extends Component {
           .then((result) => {
             let factArray = JSON.parse(result.body).data;
             for (let i = 0; i < factArray.length; i++) {
-              var catObj = {};
+              let catObj = {};
               catObj['image'] = imageArray[i];
               catObj['fact'] = factArray[i].fact;
               catObj['favorited'] = false;
@@ -57,13 +57,13 @@ class App extends Component {
   }
 
   // on the click of the "Sort by last word in fact." button, get the last word
-  // in the fact, and sort them alphabetically -- this works!! --
+  // in the fact, and sort them alphabetically
   handleSortClick (event) {
     event.preventDefault();
-    var catObj = this.state.cats;
-    catObj.sort(function (a, b) {
-      var varA = a.fact.split(' ').splice(-1)[0];
-      var varB = b.fact.split(' ').splice(-1)[0];
+    let catArr = this.state.cats;
+    catArr.sort(function (a, b) {
+      let varA = a.fact.split(' ').splice(-1)[0];
+      let varB = b.fact.split(' ').splice(-1)[0];
       if (varA < varB) {
         return -1;
       }
@@ -72,7 +72,15 @@ class App extends Component {
       }
       return 0;
     });
-    this.setState({cats: catObj});
+    this.setState({cats: catArr});
+  }
+
+  // on the click of the "Show only one at a time." button
+  handleOnlyOneClick (event) {
+    event.preventDefault();
+    // if this.state.showOne === false, choose random cat index
+    // set all other cats to display: none, change state to true
+    // else, if showOne === true, set all cats to display: true, change state to false
   }
 
   // on the click of the "Show only favorited cats." button, show only cats that
@@ -84,29 +92,38 @@ class App extends Component {
     // else, display: none
   }
 
-  // on the click of the "Show only one at a time." button
-  handleOnlyOneClick (event) {
-    event.preventDefault();
-    // if this.state.showOne === false, choose random cat index
-    // set all other cats to display: none, change state to true
-    // else, if showOne === true, set all cats to display: true, change state to false
-  }
-
   // on the click of a specifc CatCard's favorite button
   handleFavoriteButton (event) {
     event.preventDefault();
     // get array of cats
-    let catArr = this.state.cats;
+    let catArray = this.state.cats;
     // get specific card's index in array
-    let currCat = event.target.value;
+    let currentCat = event.target.value;
     // if favorited value at index is false, go into the loop to change it to true
-    if (!catArr[currCat].favorited) {
-      // log clicked button's index -- this logs the correct index,
-      // even when sorted by last word --
-      console.log(currCat);
-      // change "favorited" to true for card at current index
+    if (!catArray[currentCat].favorited) {
+      // change "favorited" to true for card at current index, and update state
+      let updatedCats = update(this.state, {
+        cats: {
+          [currentCat]: {
+            $set: {
+              ...this.state.cats[currentCat], favorited: true
+            }
+          }
+        }
+      });
+      this.setState(updatedCats);
     } else {
-      // change "favorited" to false for card at current index
+      // change "favorited" to false for card at current index, and update state
+      let updatedCats = update(this.state, {
+        cats: {
+          [currentCat]: {
+            $set: {
+              ...this.state.cats[currentCat], favorited: false
+            }
+          }
+        }
+      });
+      this.setState(updatedCats);
     }
   }
 
@@ -141,7 +158,7 @@ class App extends Component {
                   value={i}
                   onClick={this.handleFavoriteButton}
                 >
-                  {this.state.favorited ? 'Unfavorite' : 'Favorite'}
+                  {this.state.cats[i].favorited ? 'Unfavorite' : 'Favorite'}
                 </CardButton>
               </CatCard>
             )}
