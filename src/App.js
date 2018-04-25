@@ -4,6 +4,7 @@ import Header from './Components/Header/Header.js';
 import HeaderButton from './Components/Header/HeaderButton.js';
 import CatCard from './Components/CatCard/CatCard.js';
 import CardButton from './Components/CatCard/CardButton.js';
+// import API from './utils/API.js';
 import './App.css';
 
 class App extends Component {
@@ -21,6 +22,9 @@ class App extends Component {
   // once the app component mounts, call both the image API and the fact API,
   // and store their responses in state
   componentDidMount () {
+    // API.callAPIs()
+    //   .then(response => console.log(response));
+    // .then(response => this.setState({cats: catArray}));
     var catArray = [];
     let imageArray = [];
     fetch('http://thecatapi.com/api/images/get?format=xml&results_per_page=25')
