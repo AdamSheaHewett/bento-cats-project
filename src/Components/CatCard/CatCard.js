@@ -1,7 +1,7 @@
 import React from 'react';
 
 const CatCard = props => (
-  <div className='card'>
+  <div className='card' style={{display: props.display}}>
     <div className='card-image'>
       <figure className='image'>
         <img src={props.image} alt='cat' />

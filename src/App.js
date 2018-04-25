@@ -17,6 +17,7 @@ class App extends Component {
     this.handleSortClick = this.handleSortClick.bind(this);
     this.handleFavSort = this.handleFavSort.bind(this);
     this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
+    this.handleShowOneClick = this.handleShowOneClick.bind(this);
   }
 
   // once the app component mounts, call both the image API and the fact API,
@@ -52,7 +53,7 @@ class App extends Component {
               catObj['favorited'] = false;
               catArray.push(catObj);
             }
-            console.log(catArray);
+            // console.log(catArray);
             this.setState({cats: catArray});
           }, (error) => {
             console.log('error:', error);
@@ -80,11 +81,20 @@ class App extends Component {
   }
 
   // on the click of the "Show only one at a time." button
-  handleOnlyOneClick (event) {
+  handleShowOneClick (event) {
     event.preventDefault();
+    let showingOne = this.state.showOne;
+    let catArr = this.state.cats;
     // if this.state.showOne === false, choose random cat index
-    // set all other cats to display: none, change state to true
-    // else, if showOne === true, set all cats to display: true, change state to false
+    if (showingOne === false) {
+      let catToShow = Math.floor(Math.random() * catArr.length) + 1;
+      console.log(catToShow);
+      // set all other cats to display: none
+      this.setState({showOne: true});
+    } else {
+      // else (if only one is showing), set all cats to display: true
+      this.setState({showOne: false});
+    }
   }
 
   // on the click of the "Show only favorited cats." button, show only cats that
@@ -146,7 +156,7 @@ class App extends Component {
             Show only favorited cats.
           </HeaderButton>
           <HeaderButton
-            onClick={this.handleOnlyOneClick}
+            onClick={this.handleShowOneClick}
           >
             Show only one at a time.
           </HeaderButton>
@@ -157,6 +167,7 @@ class App extends Component {
               <CatCard key={i}
                 image={key.image}
                 fact={key.fact}
+                display={'none'}
               >
                 <CardButton
                   value={i}
