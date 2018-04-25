@@ -51,6 +51,7 @@ class App extends Component {
               catObj['image'] = imageArray[i];
               catObj['fact'] = factArray[i].fact;
               catObj['favorited'] = false;
+              catObj['display'] = 'block';
               catArray.push(catObj);
             }
             // console.log(catArray);
@@ -90,6 +91,7 @@ class App extends Component {
       let catToShow = Math.floor(Math.random() * catArr.length) + 1;
       console.log(catToShow);
       // set all other cats to display: none
+      // may have to do similar loop and update of state, like with changing favorited state.
       this.setState({showOne: true});
     } else {
       // else (if only one is showing), set all cats to display: true
@@ -167,7 +169,7 @@ class App extends Component {
               <CatCard key={i}
                 image={key.image}
                 fact={key.fact}
-                display={'none'}
+                display={key.display}
               >
                 <CardButton
                   value={i}
