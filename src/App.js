@@ -90,7 +90,7 @@ class App extends Component {
     if (showingOne === false) {
       let catToShow = Math.floor(Math.random() * catArr.length) + 1;
       console.log(catToShow);
-      // set all other cats to display: none
+      // set all other cats (where index !== catToShow) to display: none
       // may have to do similar loop and update of state, like with changing favorited state.
       this.setState({showOne: true});
     } else {
@@ -145,6 +145,9 @@ class App extends Component {
 
   render () {
     return (
+      // set up grid, then populate with map?
+      // should probably have grid component then fill with cards
+      // instead of one column, or columns here. should be component.
       <div>
         <Header>
           <HeaderButton
@@ -164,7 +167,7 @@ class App extends Component {
           </HeaderButton>
         </Header>
         <div className='columns'>
-          <div className='column is-6 is-offset-3'>
+          <div className='column is-4'>
             {this.state.cats.map((key, i) =>
               <CatCard key={i}
                 image={key.image}

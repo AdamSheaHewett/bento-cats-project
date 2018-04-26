@@ -14,7 +14,7 @@ const CatCard = props => (
             {props.fact}
           </p>
         </div>
-        <div className='column is-2 is-offset-1'>
+        <div className='column is-2'>
           {props.children}
         </div>
       </div>
