@@ -4,6 +4,7 @@ import Header from './Components/Header/Header.js';
 import HeaderButton from './Components/Header/HeaderButton.js';
 import CatCard from './Components/CatCard/CatCard.js';
 import CardButton from './Components/CatCard/CardButton.js';
+import Grid from './Components/Grid/Grid.js';
 // import API from './utils/API.js';
 import './App.css';
 
@@ -166,24 +167,22 @@ class App extends Component {
             Show only one at a time.
           </HeaderButton>
         </Header>
-        <div className='columns'>
-          <div className='column is-4'>
-            {this.state.cats.map((key, i) =>
-              <CatCard key={i}
-                image={key.image}
-                fact={key.fact}
-                display={key.display}
+        <Grid>
+          {this.state.cats.map((key, i) =>
+            <CatCard key={i}
+              image={key.image}
+              fact={key.fact}
+              display={key.display}
+            >
+              <CardButton
+                value={i}
+                onClick={this.handleFavoriteButton}
               >
-                <CardButton
-                  value={i}
-                  onClick={this.handleFavoriteButton}
-                >
-                  {this.state.cats[i].favorited ? 'Unfavorite' : 'Favorite'}
-                </CardButton>
-              </CatCard>
-            )}
-          </div>
-        </div>
+                {this.state.cats[i].favorited ? 'Unfavorite' : 'Favorite'}
+              </CardButton>
+            </CatCard>
+          )}
+        </Grid>
       </div>
     );
   }
