@@ -87,26 +87,39 @@ class App extends Component {
     event.preventDefault();
     let showingOne = this.state.showOne;
     let catArr = this.state.cats;
-    // if this.state.showOne === false, choose random cat index
+    // if false, choose random cat index
     if (showingOne === false) {
-      let catToShow = Math.floor(Math.random() * catArr.length) + 1;
+      let catToShow = Math.floor(Math.random() * catArr.length);
       console.log(catToShow);
       // set all other cats (where index !== catToShow) to display: none
       // may have to do similar loop and update of state, like with changing favorited state.
-      this.setState({showOne: true});
     } else {
       // else (if only one is showing), set all cats to display: true
       this.setState({showOne: false});
     }
   }
 
-  // on the click of the "Show only favorited cats." button, show only cats that
-  // have state favorited = true.
   handleFavSort (event) {
     event.preventDefault();
+    let catArray = this.state.cats;
+    let updatingState = this.state;
     // for each cat in the cat array:
-    // if this.state.cats.favorited === true, display: true
-    // else, display: none
+    catArray.forEach((cat, i) => {
+      // if the cat isn't favorited, display: none
+      if (!cat.favorited) {
+        let updatedCats = update(updatingState, {
+          cats: {
+            [i]: {
+              $set: {
+                ...this.state.cats[i], display: 'none'
+              }
+            }
+          }
+        });
+        updatingState = updatedCats;
+      }
+    });
+    this.setState(updatingState);
   }
 
   // on the click of a specifc CatCard's favorite button
