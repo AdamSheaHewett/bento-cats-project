@@ -13,7 +13,8 @@ class App extends Component {
     super(props);
     this.state = {
       cats: [],
-      showOne: false
+      showingOne: false,
+      showingFavs: false
     };
     this.handleSortClick = this.handleSortClick.bind(this);
     this.handleFavSort = this.handleFavSort.bind(this);
@@ -63,8 +64,6 @@ class App extends Component {
       );
   }
 
-  // on the click of the "Sort by last word in fact." button, get the last word
-  // in the fact, and sort them alphabetically
   handleSortClick (event) {
     event.preventDefault();
     let catArr = this.state.cats;
@@ -85,28 +84,15 @@ class App extends Component {
   // on the click of the "Show only one at a time." button
   handleShowOneClick (event) {
     event.preventDefault();
-    let showingOne = this.state.showOne;
-    let catArr = this.state.cats;
-    // if false, choose random cat index
-    if (showingOne === false) {
-      let catToShow = Math.floor(Math.random() * catArr.length);
-      console.log(catToShow);
-      // set all other cats (where index !== catToShow) to display: none
-      // may have to do similar loop and update of state, like with changing favorited state.
-    } else {
-      // else (if only one is showing), set all cats to display: true
-      this.setState({showOne: false});
-    }
-  }
-
-  handleFavSort (event) {
-    event.preventDefault();
+    let showingOne = this.state.showingOne;
     let catArray = this.state.cats;
     let updatingState = this.state;
-    // for each cat in the cat array:
-    catArray.forEach((cat, i) => {
-      // if the cat isn't favorited, display: none
-      if (!cat.favorited) {
+    const catToShow = Math.floor(Math.random() * catArray.length);
+    let catsToHide = catArray.filter((cat, i) => {
+      return i !== catToShow;
+    });
+    if (!showingOne) {
+      catsToHide.forEach((cat, i) => {
         let updatedCats = update(updatingState, {
           cats: {
             [i]: {
@@ -117,9 +103,67 @@ class App extends Component {
           }
         });
         updatingState = updatedCats;
-      }
-    });
-    this.setState(updatingState);
+      });
+      updatingState.showingOne = true;
+      this.setState(updatingState);
+    } else {
+      catArray.forEach((cat, i) => {
+        let updatedCats = update(updatingState, {
+          cats: {
+            [i]: {
+              $set: {
+                ...this.state.cats[i], display: 'block'
+              }
+            }
+          }
+        });
+        updatingState = updatedCats;
+      });
+      updatingState.showingOne = false;
+      this.setState(updatingState);
+    }
+  }
+
+  handleFavSort (event) {
+    event.preventDefault();
+    let showingFavs = this.state.showingFavs;
+    let catArray = this.state.cats;
+    let updatingState = this.state;
+    if (!showingFavs) {
+      // for each cat in the cat array:
+      catArray.forEach((cat, i) => {
+        // if the cat isn't favorited, display: none
+        if (!cat.favorited) {
+          let updatedCats = update(updatingState, {
+            cats: {
+              [i]: {
+                $set: {
+                  ...this.state.cats[i], display: 'none'
+                }
+              }
+            }
+          });
+          updatingState = updatedCats;
+        }
+      });
+      updatingState.showingFavs = true;
+      this.setState(updatingState);
+    } else {
+      catArray.forEach((cat, i) => {
+        let updatedCats = update(updatingState, {
+          cats: {
+            [i]: {
+              $set: {
+                ...this.state.cats[i], display: 'block'
+              }
+            }
+          }
+        });
+        updatingState = updatedCats;
+      });
+      updatingState.showingFavs = false;
+      this.setState(updatingState);
+    }
   }
 
   // on the click of a specifc CatCard's favorite button
@@ -172,12 +216,12 @@ class App extends Component {
           <HeaderButton
             onClick={this.handleFavSort}
           >
-            Show only favorited cats.
+            {this.state.showingFavs ? 'Show all cats.' : 'Show only favorited cats.'}
           </HeaderButton>
           <HeaderButton
             onClick={this.handleShowOneClick}
           >
-            Show only one at a time.
+            {this.state.showingOne ? 'Show all cats.' : 'Show only one cat.'}
           </HeaderButton>
         </Header>
         <Grid>
