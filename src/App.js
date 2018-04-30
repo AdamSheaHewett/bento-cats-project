@@ -203,9 +203,6 @@ class App extends Component {
 
   render () {
     return (
-      // set up grid, then populate with map?
-      // should probably have grid component then fill with cards
-      // instead of one column, or columns here. should be component.
       <div>
         <Header>
           <HeaderButton
