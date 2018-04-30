@@ -5,7 +5,7 @@ import HeaderButton from './Components/Header/HeaderButton.js';
 import CatCard from './Components/CatCard/CatCard.js';
 import CardButton from './Components/CatCard/CardButton.js';
 import Grid from './Components/Grid/Grid.js';
-// import API from './utils/API.js';
+import axios from 'axios';
 import './App.css';
 
 class App extends Component {
@@ -16,25 +16,22 @@ class App extends Component {
       showingOne: false,
       showingFavs: false
     };
-    this.handleSortClick = this.handleSortClick.bind(this);
-    this.handleFavSort = this.handleFavSort.bind(this);
-    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
+    this.handleAlphabetSortClick = this.handleAlphabetSortClick.bind(this);
     this.handleShowOneClick = this.handleShowOneClick.bind(this);
+    this.handleShowFavClick = this.handleShowFavClick.bind(this);
+    this.handleFavoriteButton = this.handleFavoriteButton.bind(this);
   }
 
-  // once the app component mounts, call both the image API and the fact API,
-  // and store their responses in state
+  // once the app component mounts, call both the image API and the fact API
   componentDidMount () {
-    // API.callAPIs()
-    //   .then(response => console.log(response));
-    // .then(response => this.setState({cats: catArray}));
-    var catArray = [];
-    let imageArray = [];
-    fetch('http://thecatapi.com/api/images/get?format=xml&results_per_page=25')
-      .then(res => res.text())
-      .then(result => (new window.DOMParser()).parseFromString(result, 'text/xml'))
-      .then((data) => {
-        // the number 25 is hard-coded for the demonstration from the given API
+    const catImageAPI = 'http://thecatapi.com/api/images/get?format=xml&results_per_page=25';
+    const catFactAPI = 'http://cors-proxy.htmldriven.com/?url=https://catfact.ninja/facts?limit=25';
+    const catArray = [];
+    const imageArray = [];
+    axios.get(catImageAPI)
+      .then(result => (new window.DOMParser()).parseFromString(result.data, 'text/xml'))
+      .then(data => {
+        // parsing XML to get link to each image
         for (let i = 0; i < 25; i++) {
           imageArray.push(
             (data.getElementsByTagName('image')[i].childNodes[1].innerHTML)
@@ -44,10 +41,10 @@ class App extends Component {
         console.log('error:', error);
       })
       .then(
-        fetch('http://cors-proxy.htmldriven.com/?url=https://catfact.ninja/facts?limit=25')
-          .then(res => res.json())
-          .then((result) => {
-            let factArray = JSON.parse(result.body).data;
+        axios.get(catFactAPI)
+          .then(result => {
+            const factArray = JSON.parse(result.data.body).data;
+            // constructing each cat object to store in cat array in state
             for (let i = 0; i < factArray.length; i++) {
               let catObj = {};
               catObj['image'] = imageArray[i];
@@ -56,7 +53,6 @@ class App extends Component {
               catObj['display'] = 'block';
               catArray.push(catObj);
             }
-            // console.log(catArray);
             this.setState({cats: catArray});
           }, (error) => {
             console.log('error:', error);
@@ -64,10 +60,12 @@ class App extends Component {
       );
   }
 
-  handleSortClick (event) {
+  // sort by last word in fact
+  handleAlphabetSortClick (event) {
     event.preventDefault();
-    let catArr = this.state.cats;
-    catArr.sort(function (a, b) {
+    const catArr = this.state.cats;
+    // sorting by first letter of last word in fact sentence
+    catArr.sort((a, b) => {
       let varA = a.fact.split(' ').splice(-1)[0];
       let varB = b.fact.split(' ').splice(-1)[0];
       if (varA < varB) {
@@ -81,16 +79,17 @@ class App extends Component {
     this.setState({cats: catArr});
   }
 
-  // on the click of the "Show only one at a time." button
+  // show only one cat
   handleShowOneClick (event) {
     event.preventDefault();
-    let showingOne = this.state.showingOne;
-    let catArray = this.state.cats;
     let updatingState = this.state;
+    const showingOne = this.state.showingOne;
+    const catArray = this.state.cats;
     const catToShow = Math.floor(Math.random() * catArray.length);
-    let catsToHide = catArray.filter((cat, i) => {
+    const catsToHide = catArray.filter((cat, i) => {
       return i !== catToShow;
     });
+    // if all cats are showing, update the all cats except one to have display: none, update state
     if (!showingOne) {
       catsToHide.forEach((cat, i) => {
         let updatedCats = update(updatingState, {
@@ -107,6 +106,7 @@ class App extends Component {
       updatingState.showingOne = true;
       this.setState(updatingState);
     } else {
+      // if only one cat is showing, update all cats to display: block, update state
       catArray.forEach((cat, i) => {
         let updatedCats = update(updatingState, {
           cats: {
@@ -124,15 +124,15 @@ class App extends Component {
     }
   }
 
-  handleFavSort (event) {
+  // show only favorited cats
+  handleShowFavClick (event) {
     event.preventDefault();
-    let showingFavs = this.state.showingFavs;
-    let catArray = this.state.cats;
     let updatingState = this.state;
+    const showingFavs = this.state.showingFavs;
+    const catArray = this.state.cats;
+    // if showing all cats, update each cat that isn't favorited to display: none, update state
     if (!showingFavs) {
-      // for each cat in the cat array:
       catArray.forEach((cat, i) => {
-        // if the cat isn't favorited, display: none
         if (!cat.favorited) {
           let updatedCats = update(updatingState, {
             cats: {
@@ -149,6 +149,7 @@ class App extends Component {
       updatingState.showingFavs = true;
       this.setState(updatingState);
     } else {
+      // if only showing favorited, update all cats to display: block, update state
       catArray.forEach((cat, i) => {
         let updatedCats = update(updatingState, {
           cats: {
@@ -169,12 +170,11 @@ class App extends Component {
   // on the click of a specifc CatCard's favorite button
   handleFavoriteButton (event) {
     event.preventDefault();
-    let catArray = this.state.cats;
+    const catArray = this.state.cats;
     // get specific card's index in array
-    let currentCat = event.target.value;
-    // if favorited value at index is false, go into the loop to change it to true
+    const currentCat = event.target.value;
+    // if favorited value at index is false, change it to true, update state
     if (!catArray[currentCat].favorited) {
-      // change "favorited" to true for card at current index, and update state
       let updatedCats = update(this.state, {
         cats: {
           [currentCat]: {
@@ -205,12 +205,12 @@ class App extends Component {
       <div>
         <Header>
           <HeaderButton
-            onClick={this.handleSortClick}
+            onClick={this.handleAlphabetSortClick}
           >
             Sort by last word in fact.
           </HeaderButton>
           <HeaderButton
-            onClick={this.handleFavSort}
+            onClick={this.handleShowFavClick}
           >
             {this.state.showingFavs ? 'Show all cats.' : 'Show only favorited cats.'}
           </HeaderButton>
