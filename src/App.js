@@ -169,7 +169,6 @@ class App extends Component {
   // on the click of a specifc CatCard's favorite button
   handleFavoriteButton (event) {
     event.preventDefault();
-    // get array of cats
     let catArray = this.state.cats;
     // get specific card's index in array
     let currentCat = event.target.value;

@@ -2,7 +2,7 @@ import React from 'react';
 import './Header.css';
 
 const Header = props => (
-  <nav className='navbar is-info'>
+  <nav className='navbar is-primary'>
     <div className='container'>
       <div className='navbar-brand'>
         <a className='navbar-item'>
