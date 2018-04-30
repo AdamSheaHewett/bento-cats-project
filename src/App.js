@@ -23,6 +23,8 @@ class App extends Component {
   }
 
   // once the app component mounts, call both the image API and the fact API
+  // - API calls are in the main app file becuase I manipulate the data directly from
+  // the call before storing it into state -
   componentDidMount () {
     const catImageAPI = 'http://thecatapi.com/api/images/get?format=xml&results_per_page=25';
     const catFactAPI = 'http://cors-proxy.htmldriven.com/?url=https://catfact.ninja/facts?limit=25';
