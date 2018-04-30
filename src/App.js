@@ -87,7 +87,11 @@ class App extends Component {
     let updatingState = this.state;
     const showingOne = this.state.showingOne;
     const catArray = this.state.cats;
+    // select random index to show
     const catToShow = Math.floor(Math.random() * catArray.length);
+    // filter removes the right cat at the random index, and the returned array is
+    // correct, but the forEach function only sees that there are 23 indeces (instead
+    // of 24) and will always show the last cat and hide all the others
     const catsToHide = catArray.filter((cat, i) => {
       return i !== catToShow;
     });
